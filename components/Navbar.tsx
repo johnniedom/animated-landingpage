@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
-import MainButton from "./utils/MainButton"
+import MainButton from "./utils/MainButton";
 import Link from "next/link";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 function NavBar(props?: any) {
   const links = [
@@ -40,10 +41,13 @@ function NavBar(props?: any) {
   };
 
   const [navBg, setNavBg] = useState(false);
+  const [showIsButton, setShowIsButton] = useState(false);
   const isHome = props.name === "Homepage" ? true : false;
 
   const changeNavBg = () => {
-    window.scrollY >= 20 ? setNavBg(true) : setNavBg(false);
+    console.log("scroll", window.scrollY, navBg);
+    window.scrollY >= 40 ? setNavBg(true) : setNavBg(false);
+    window.scrollY >= 700 ? setShowIsButton(true) : setShowIsButton(false);
   };
 
   useEffect(() => {
@@ -53,23 +57,43 @@ function NavBar(props?: any) {
     };
   }, []);
 
+  const frosted = ` bg-[linear-gradient(to_bottom,hsl(0deg_0%_0%)_0%,transparent_30%)] before:rounded-2xl before:bg-[#ffffff19] before:content-[''] before:h-[100%] before:top-0 before:z-[-1] before:backdrop-blur-[14px] before:mask-[linear-gradient(to_bottom,black_90%,transparent)] before:inset-0 before:absolute before:pointer-events-none`;
+
+  const Spring = {
+    type: "spring",
+    stiffness: 700,
+    damping: 30,
+  };
+
   return (
-    <div className="md:sticky md:top-0 md:shadow-none max-h-[70px] z-20 mt-[5rem] md:mt-0">
+    <div className="md:sticky border-none md:inset-0 md:mx-auto shadow-none max-h-[80px] not-visited: z-20 mt-[5rem] flex justify-center items-center">
       {/* DESKTOP */}
-      <div
-        className={`hidden lg:block rounded-2xl mt-4 fixed w-full max-w-[1400px] ${
-          props.name == "browse" ? "border-2 border-[#E3E1E3] bg-[#CD82FF]" : ""
-        } animate-in fade-in zoom-in ${
-          isHome && navBg
-            ? "bg-gradient-to-tr from-[#450CF0] to-[#CD82FF] top-0 scroll-smooth  ease-in-out transition-all duration-300"
-            : "bg-transparent"
-        } p-4`}
+      <motion.div
+        className={`hidden lg:block border-none mt-4 shadow-none fixed rounded-2xl p-4 max-w-[1400px] ${
+          isHome && navBg ? `${frosted} w-[80%] ` : "bg-transparent w-full "
+        }`}
+        layout={true}
       >
-        <div className="flex justify-between mx-4 items-center">
+        <motion.div
+          className={`flex justify-between items-center ${
+            isHome && navBg ? `my-[4px] ` : ""
+          }`}
+          layout="position"
+        >
           <Link href="/">
-            <img src="/assets/fundbrave-logo.png" className="w-[180px]" alt="logo" />
+            <img
+              src="/assets/fundbrave-logo.png"
+              className="w-[180px]"
+              alt="logo"
+            />
           </Link>
-          <div className="flex gap-[20px] xl:gap-[50px] text-[16px] items-center select-none">
+          <motion.div className="flex gap-[20px]  text-[16px] items-center select-none"
+              layout="position"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={Spring}
+          >
             {links.map((item, index) => (
               <div key={index} className="flex gap-2">
                 <a href={item.route}>
@@ -88,29 +112,46 @@ function NavBar(props?: any) {
                 )}
               </div>
             ))}
-          </div>
-          <div className="flex items-center gap-[20px] select-none">
-            <Link target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSfy2FCFFlju0w6INMdYw4Cb9wbNE0OCkMroHsYJnjYw2bMnNw/viewform?pli=1">
-              <MainButton
-                text="Partner With Us"
-                width="full"
-                className="bg-[#450CF01A] h-16 text-white shadow-lg outline-none border-0"
-              />
-            </Link>
+          </motion.div>
+          {showIsButton && (
+            <motion.div
+              className="flex items-center gap-[20px] select-none"
+              layout="position"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={Spring}
+            >
+              <Link
+                target="_blank"
+                href="https://docs.google.com/forms/d/e/1FAIpQLSfy2FCFFlju0w6INMdYw4Cb9wbNE0OCkMroHsYJnjYw2bMnNw/viewform?pli=1"
+              >
+                <MainButton
+                  text="Partner With Us"
+                  width="w-[180px]"
+                  className="bg-[#450CF01A] h-12 text-white outline-none border-0"
+                />
+              </Link>
+            </motion.div>
+          )}
+        </motion.div>
+      </motion.div>
 
-          </div>
-        </div>
-      </div>
       {/* MOBILE */}
       <div
-        className={` block lg:hidden shadow-sm  fixed top-0 w-full z-[999] bg-transparent py-4 animate-in fade-in zoom-in  ${
+        className={` block lg:hidden fixed top-0 w-full z-[999] bg-transparent py-4 animate-in fade-in zoom-in before:bg-[#ffffff19] before:content-[''] before:h-[100%] before:top-0 before:z-[-1]  before:backdrop-blur-[12px] before:mask-[linear-gradient(to_bottom,black_0%_50%,transparent_50%_100%)] before:inset-0 before:absolute before:pointer-events-none  ${
           menu ? " bg-white text-black py-2" : ""
         } `}
       >
         <div className="flex justify-between mx-[10px]">
           <div className="flex gap-[50px] text-[16px] items-center select-none">
-            <img src="/assets/fundbrave-logo.png" className="w-[180px]" alt="logo" />
+            <img
+              src="/assets/fundbrave-logo.png"
+              className="w-[100px]"
+              alt="logo"
+            />
           </div>
+
           <div className="flex items-center gap-[40px]">
             {menu ? (
               <X
@@ -133,11 +174,11 @@ function NavBar(props?: any) {
               {links.map((item, index) => (
                 <div key={index} className="flex gap-2">
                   <a href={item.route}>
-                  <p
-                    className={`hover:text-primary cursor-pointer flex items-center gap-2  font-[500] text-gray`}
-                  >
-                    {item.name}
-                  </p>
+                    <p
+                      className={`hover:text-primary cursor-pointer flex items-center gap-2  font-[500] text-gray`}
+                    >
+                      {item.name}
+                    </p>
                   </a>
                   {item.badgeCount ? (
                     <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-[#450CF0] to-[#CD82FF] flex justify-center items-center  font-semibold text-white">
@@ -150,7 +191,10 @@ function NavBar(props?: any) {
               ))}
 
               <div className="flex flex-col gap-[20px] select-none">
-                <Link target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSfy2FCFFlju0w6INMdYw4Cb9wbNE0OCkMroHsYJnjYw2bMnNw/viewform?pli=1">
+                <Link
+                  target="_blank"
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSfy2FCFFlju0w6INMdYw4Cb9wbNE0OCkMroHsYJnjYw2bMnNw/viewform?pli=1"
+                >
                   <MainButton
                     text="Join the Waitlist"
                     width="full"

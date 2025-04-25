@@ -1,6 +1,6 @@
 import { forwardRef, ReactElement } from "react";
 import { Loader2 } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "../UI/Button";
 
 type MainButtonProps = {
   text: string;
