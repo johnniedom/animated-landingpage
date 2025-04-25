@@ -12,6 +12,7 @@ export default function Home() {
     <div className="min-h-screen overflow-hidden font-sans h-full">
       <NavBar name="Homepage" />
       <Header />
+      <Example />
     </div>
   );
 }
