@@ -14,7 +14,7 @@ const products = [
 
 export default function Example() {
   return (
-    <main className="bg-white px-4 pb-24 pt-16 sm:px-6 sm:pt-24 lg:px-8 lg:py-32">
+    <main className="bg-black px-4 pb-24 pt-16 sm:px-6 sm:pt-24 lg:px-8 lg:py-32">
       <div className="mx-auto max-w-3xl">
         <div className="max-w-xl">
           <h1 className="text-base font-medium text-indigo-600">Thank you!</h1>
